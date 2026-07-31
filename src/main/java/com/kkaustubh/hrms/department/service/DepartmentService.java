@@ -1,16 +1,17 @@
 package com.kkaustubh.hrms.department.service;
 
-import com.kkaustubh.hrms.department.entity.Department;
+import com.kkaustubh.hrms.department.dto.DepartmentRequest;
+import com.kkaustubh.hrms.department.dto.DepartmentResponse;
 import java.util.List;
 
 public interface DepartmentService {
-    Department createDepartment(Department department);
+    DepartmentResponse createDepartment(DepartmentRequest request);
 
-    List<Department> getAllDepartments();
+    List<DepartmentResponse> getAllDepartments();
 
-    Department getDepartmentById(Long id);
+    DepartmentResponse getDepartmentById(Long id);
 
-    Department updateDepartment(Long id, Department department);
+    DepartmentResponse updateDepartment(Long id, DepartmentRequest request);
 
     void deleteDepartment(Long id);
 }

@@ -1,6 +1,9 @@
 package com.kkaustubh.hrms.department.service.impl;
 
+import com.kkaustubh.hrms.department.dto.DepartmentRequest;
+import com.kkaustubh.hrms.department.dto.DepartmentResponse;
 import com.kkaustubh.hrms.department.entity.Department;
+import com.kkaustubh.hrms.department.mapper.DepartmentMapper;
 import com.kkaustubh.hrms.department.repository.DepartmentRepository;
 import com.kkaustubh.hrms.department.service.DepartmentService;
 import java.util.List;
@@ -15,31 +18,35 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Department createDepartment(Department department) {
-        return departmentRepository.save(department);
+    public DepartmentResponse createDepartment(DepartmentRequest request) {
+        Department department = DepartmentMapper.toEntity(request);
+
+        Department savedDepartment = departmentRepository.save(department);
+
+        return DepartmentMapper.toResponse(savedDepartment);
     }
 
     @Override
-    public List<Department> getAllDepartments() {
-        return departmentRepository.findAll();
+    public List<DepartmentResponse> getAllDepartments() {
+        return departmentRepository.findAll().stream().map(DepartmentMapper::toResponse).toList();
     }
 
     @Override
-    public Department getDepartmentById(Long id) {
-        return departmentRepository.findById(id).orElse(null);
+    public DepartmentResponse getDepartmentById(Long id) {
+        Department department = departmentRepository.findById(id).orElseThrow();
+
+        return DepartmentMapper.toResponse(department);
     }
 
     @Override
-    public Department updateDepartment(Long id, Department department) {
-        Department existingDepartment = departmentRepository.findById(id).orElse(null);
+    public DepartmentResponse updateDepartment(Long id, DepartmentRequest request) {
+        Department department = departmentRepository.findById(id).orElseThrow();
 
-        if (existingDepartment == null) {
-            return null;
-        }
+        department.setName(request.getName());
 
-        existingDepartment.setName(department.getName());
+        Department updatedDepartment = departmentRepository.save(department);
 
-        return departmentRepository.save(existingDepartment);
+        return DepartmentMapper.toResponse(updatedDepartment);
     }
 
     @Override
